@@ -19,14 +19,6 @@ public class Response {
         return map;
     }
 
-    public Map Sukses(Object objek){
-        Map map = new HashMap();
-        map.put("message", "Success");
-        map.put("status", 200);
-        map.put("data", objek);
-
-        return map;
-    }
 
     public Map error(Object obj, Object code){
         Map map = new HashMap();

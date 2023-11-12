@@ -17,6 +17,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query(value = "select c from User c WHERE c.id = :idUser")
     public User getById(@Param("idUser") UUID idUser);
 
+
 //    // NativeQeury : menggunakan JPQL ATAU JPQ QUERY
 //    // Perbedaaannya adalah kalo Nativequery select Table Bukan CLASSS Entity
 //    // dan beda field

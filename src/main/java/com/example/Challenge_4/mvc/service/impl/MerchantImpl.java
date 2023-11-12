@@ -5,6 +5,7 @@ import com.example.Challenge_4.mvc.entity.Product;
 import com.example.Challenge_4.mvc.repository.MerchantRepository;
 import com.example.Challenge_4.mvc.repository.ProductRepository;
 import com.example.Challenge_4.mvc.service.MerchantService;
+import com.example.Challenge_4.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,9 @@ import java.util.*;
 public class MerchantImpl implements MerchantService {
 
     @Autowired
+    public Response response;
+
+    @Autowired
     public MerchantRepository merchantRepository;
 
     @Autowired
@@ -22,48 +26,51 @@ public class MerchantImpl implements MerchantService {
 
     @Override
     public Map save(Merchant merchant) {
-        Map map = new HashMap();
 
-        if (merchant.getMerchant_name() == null || merchant.getMerchant_name().isEmpty() ||
-                merchant.getMerchant_location() == null || merchant.getMerchant_location().isEmpty()) {
-            map.put("message", "All fields (merchant_name, merchant_location, open) are required");
-            map.put("success", "false");
-        } else {
-            try {
+
+        try {
+            if (merchant.getMerchant_name() == null || merchant.getMerchant_name().isEmpty() ||
+                    merchant.getMerchant_location() == null || merchant.getMerchant_location().isEmpty()) {
+                return response.error("All fields (merchant_name, merchant_location, open) are required", 404);
+            } else {
+
                 // Attempt to save the user
                 Merchant saveData = merchantRepository.save(merchant);
-                map.put("data", saveData);
-                map.put("success", "true");
-            } catch (DataIntegrityViolationException e) {
-                // Catch an exception if the email already exists
-                map.put("message", "Email already exists");
-                map.put("success", "false");
+                return response.sukses(saveData);
+
+
             }
         }
+        catch(Exception e){
+return response.error(e,400);
+            }
 
-        return map;
-    }
+        }
+
 
     public Map update(Merchant merchant) {
-        Map response = new HashMap();
+
         try {
+            UUID id = merchant.getId();
+
+            if (id == null) {
+                return response.error("Merchant id cannot be null", 400);
+            }
+
             Merchant checkData = merchantRepository.findById(merchant.getId()).orElse(null);
 
             if (checkData != null) {
                 checkData.setMerchant_name(merchant.getMerchant_name());
                 checkData.setMerchant_location(merchant.getMerchant_location());
                 Merchant updatedMerchant = merchantRepository.save(merchant);
-                response.put("success", true);
-                response.put("data", updatedMerchant);
+              return response.sukses(updatedMerchant);
             } else {
-                response.put("success", false);
-                response.put("message", "Merchant not found");
+             return response.error("Merchant not found",404);
             }
         } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", e.getMessage());
+            return response.error(e,400);
         }
-        return response;
+
     }
 
     @Override
@@ -74,13 +81,17 @@ public class MerchantImpl implements MerchantService {
                 merchantRepository.deleteById(id);
                 response.put("success", true);
                 response.put("message", "Merchant deleted");
+                response.put("status",200);
+
             } else {
                 response.put("success", false);
                 response.put("message", "Merchant not found");
+                response.put("status",404);
             }
         } catch (Exception e) {
             response.put("success", false);
             response.put("message", e.getMessage());
+            response.put("status",400);
         }
         return response;
     }
@@ -93,16 +104,21 @@ public class MerchantImpl implements MerchantService {
                 Merchant merchant = merchantRepository.findById(id).get();
                 response.put("success", true);
                 response.put("data", merchant);
+                response.put("status",200);
             } else {
                 response.put("success", false);
                 response.put("message", "Merchant not found");
+                response.put("status",404);
             }
         } catch (Exception e) {
             response.put("success", false);
             response.put("message", e.getMessage());
+            response.put("status",400);
         }
         return response;
     }
+
+
 
     @Override
     public List<Merchant> getAllMerchants() {
@@ -111,23 +127,27 @@ public class MerchantImpl implements MerchantService {
 
     @Override
     public Map getMerchantAndProducts(UUID merchantId) {
-        Map<String, Object> response = new HashMap<>();
+     try{
+         Map<String, Object> abc = new HashMap<>();
 
-        // Get the merchant by ID
-        Optional<Merchant> merchantOptional = merchantRepository.findById(merchantId);
+         // Get the merchant by ID
+         Optional<Merchant> merchantOptional = merchantRepository.findById(merchantId);
 
-        if (merchantOptional.isPresent()) {
-            Merchant merchant = merchantOptional.get();
-            response.put("merchant", merchant);
+         if (merchantOptional.isPresent()) {
+             Merchant merchant = merchantOptional.get();
+             abc.put("merchant", merchant);
 
-            // Get the products associated with the merchant
-            List<Product> products = productRepository.findByMerchant_Id(merchantId);
-            response.put("products", products);
+             // Get the products associated with the merchant
+             List<Product> products = productRepository.findByMerchant_Id(merchantId);
+             abc.put("products", products);
 
-            return response;
-        } else {
-            response.put("message", "Merchant not found");
-            return response;
-        }
+             return response.sukses(abc) ;
+         } else {
+             abc.put("message", "Merchant not found");
+             return response.error(abc,400);
+         }
+     }catch (Exception e){
+         return response.error(e,400);
+     }
     }
     }

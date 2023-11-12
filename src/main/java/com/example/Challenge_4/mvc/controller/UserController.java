@@ -1,5 +1,6 @@
 package com.example.Challenge_4.mvc.controller;
 
+import com.example.Challenge_4.mvc.dto.UserDTO;
 import com.example.Challenge_4.mvc.entity.User;
 import com.example.Challenge_4.mvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,15 +36,32 @@ public class UserController {
 //        return new ResponseEntity<Map>(user.delete(request.getId()), HttpStatus.OK);
 //    }
 
-    @GetMapping(value = {"/{id}", "/{id}/"})
-    public ResponseEntity<Map> getById(@PathVariable("id") UUID id) {
-        return new ResponseEntity<Map>(user.getByID(id), HttpStatus.OK);
+    @GetMapping("/list")
+    public ResponseEntity<Map<String, Object>> getUserDetails(
+            @RequestParam(required = true) UUID userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size)
+
+    {
+
+        Map<String, Object> response = user.getByID(userId, page, size);
+
+        if (response.containsKey("error")) {
+            // If there's an error, return an error response
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else if (response.containsKey("message")) {
+            // If there's a message, return a not found response
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } else {
+            // If successful, return a success response
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
     }
 
 
     @GetMapping("/users")
-    public List<User> getAllUsers() {
-        List<User> users = user.getAllUsers();
-        return users;
+    public ResponseEntity<Map> getAllUsers() {
+        return new ResponseEntity<Map>(user.getAllUsers(),HttpStatus.OK);
+
     }
 }

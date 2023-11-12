@@ -1,7 +1,9 @@
-package com.example.Challenge_4;
+package com.example.Challenge_4.config;
 
 
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 public class Config {
@@ -27,6 +29,8 @@ public class Config {
     public static final String USER_ID_REQURIRED = "User id is required.";
 
     public static final String QUANTITY_REQURIRED = "Quantity must greater than 0.";
+
+
 
 
 

@@ -1,7 +1,7 @@
 package com.example.Challenge_4.mvc.service.impl;
 
 
-import com.example.Challenge_4.Config;
+import com.example.Challenge_4.config.Config;
 import com.example.Challenge_4.mvc.entity.Order;
 import com.example.Challenge_4.mvc.entity.User;
 import com.example.Challenge_4.mvc.repository.OrderRepository;
@@ -128,13 +128,13 @@ public class OrderImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getAllOrders() {
+    public Map getAllOrders() {
         try {
             log.info("Get all orders");
-            return orderRepository.findAll();
+            return response.sukses(orderRepository.findAll());
         } catch (Exception e) {
             log.error("Get all orders error: " + e.getMessage());
-            return new ArrayList<>();
+            return response.error(e,400);
         }
     }
 }

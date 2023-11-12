@@ -24,5 +24,5 @@ public class OrderDetail {
 
     private int quantity;
 
-    // Constructors, getters, and setters
+
 }

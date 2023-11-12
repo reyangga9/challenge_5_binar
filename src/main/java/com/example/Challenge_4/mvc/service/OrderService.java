@@ -14,5 +14,5 @@ public interface OrderService {
 
     Map getByID(UUID orderId);
 
-    List<Order> getAllOrders();
+    Map getAllOrders();
 }

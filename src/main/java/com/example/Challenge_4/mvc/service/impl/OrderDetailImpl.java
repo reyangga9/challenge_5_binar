@@ -1,14 +1,12 @@
 package com.example.Challenge_4.mvc.service.impl;
 
-import com.example.Challenge_4.Config;
+import com.example.Challenge_4.config.Config;
 import com.example.Challenge_4.mvc.entity.Order;
 import com.example.Challenge_4.mvc.entity.OrderDetail;
 import com.example.Challenge_4.mvc.entity.Product;
-import com.example.Challenge_4.mvc.entity.User;
 import com.example.Challenge_4.mvc.repository.OrderDetailRepository;
 import com.example.Challenge_4.mvc.repository.OrderRepository;
 import com.example.Challenge_4.mvc.repository.ProductRepository;
-import com.example.Challenge_4.mvc.repository.UserRepository;
 import com.example.Challenge_4.mvc.service.OrderDetailService;
 import com.example.Challenge_4.utils.Response;
 import lombok.extern.slf4j.Slf4j;

@@ -1,8 +1,7 @@
 package com.example.Challenge_4.mvc.service.impl;
 
-import com.example.Challenge_4.Config;
+import com.example.Challenge_4.config.Config;
 import com.example.Challenge_4.mvc.entity.Merchant;
-import com.example.Challenge_4.mvc.entity.Order;
 import com.example.Challenge_4.mvc.entity.Product;
 import com.example.Challenge_4.mvc.repository.ProductRepository;
 import com.example.Challenge_4.mvc.repository.MerchantRepository;

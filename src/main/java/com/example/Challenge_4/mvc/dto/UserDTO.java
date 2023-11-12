@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-public class OrderDTO {
+public class UserDTO {
     private UUID id;
-    private LocalDateTime order_time;
-    private String destination_address;
-    private boolean completed;
+    private String username;
+    private String email_address;
+
 }
